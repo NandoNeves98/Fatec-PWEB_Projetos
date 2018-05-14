@@ -14,9 +14,93 @@
 	
 
 	<ui:define name="principal">
-	 	 
-	   	<p:outputLabel value="#{msg['pages.tela2.hello']}"/>
-	   
+	  
+	  <h1><p:outputLabel value="#{msg['pages.cadastroAluno.menu']}"/></h1>
+	  
+	  <h:form id="PROFESSOR">	
+	  <p:panelGrid columns="2">
+      <p:outputLabel value="#{msg['pages.cadastroAluno.nome']}" />
+      <p:inputText value="#{professorManagedBean.professor.nome}"/>
+      <p:outputLabel value="#{msg['pages.cadastroAluno.curso']}" />
+      <p:inputText value="#{professorManagedBean.professor.curso}"/>
+	  </p:panelGrid>
+	  <p:commandButton value="#{msg['pages.cadastroAluno.btnSalvar']}" 
+	                 action="#{professorManagedBean.salvar}"
+	                 update=":PROFESSOR, :tablePROFESSOR:tabelaAluno"
+	                 />
+       </h:form>
+
+   <br/>
+   <h:form id="tablePROFESSOR">
+   
+    <p:dataTable
+                value="#{professorManagedBean.professores}"
+                var="aux"
+                id="tabelaAluno"
+            
+                editable="true"
+            
+                paginator="true"
+                rows="5"
+                paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                rowsPerPageTemplate="5,10,15"
+                
+                emptyMessage="#{msg['pages.cadastroAluno.filterMSG']}"
+                
+   >
+      
+      <p:ajax event="rowEdit" listener="#{professorManagedBean.onRowEdit}" update="tabelaAluno" />
+      
+      <p:column headerText="#{msg['pages.cadastroAluno.matricula']}" filterBy="#{aux.registro}">
+        <p:outputLabel value="#{aux.registro}" />
+      </p:column>
+      
+      
+      
+      <p:column headerText="#{msg['pages.cadastroAluno.nome']}" filterBy="#{aux.nome}">
+    
+    			<p:cellEditor>
+					<f:facet name="output">
+						<p:outputLabel value="#{aux.nome}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText id="alunoNome" value="#{aux.nome}"
+							style="width:100%" />
+					</f:facet>
+				</p:cellEditor>
+	  </p:column>
+    
+      <p:column headerText="#{msg['pages.cadastroAluno.curso']}" filterBy="#{aux.curso}">
+     
+     			<p:cellEditor>
+					<f:facet name="output">
+						<p:outputLabel value="#{aux.curso}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText id="alunoCurso" value="#{aux.curso}"
+							style="width:100%" />
+					</f:facet>
+				</p:cellEditor>
+      </p:column>
+      
+      <p:column style="width:70px" headerText="#{msg['pages.cadastroAluno.optionTable']}">
+					
+					<p:rowEditor />
+					
+					<p:commandLink id="remover" styleClass="ui-icon ui-icon-trash"
+						style="text-align:center"
+						actionListener="#{professorManagedBean.remover(aux)}"
+						update="tabelaAluno" />
+	  </p:column>
+
+      
+      
+   </p:dataTable>	
+
+	</h:form>
+
+	
+   	   
 	</ui:define>
 </ui:composition>
 
